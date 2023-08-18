@@ -7,11 +7,15 @@ export class DeviceReadingsService {
   private deviceReadings: Map<string, Reading[]> = new Map()
 
   store(storeReadingsDto: StoreReadingsDto) {
+    const retrieved = this.deviceReadings.get(storeReadingsDto.id)
 
+    if (!retrieved) {
+      this.deviceReadings.set(storeReadingsDto.id, storeReadingsDto.readings)
+    }
   }
 
 
   findOne(id: string): { readings: Reading[] } {
-    return { readings: [] }
+    return { readings: this.deviceReadings.get(id) }
   }
 }
