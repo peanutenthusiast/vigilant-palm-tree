@@ -1,11 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsISO8601, IsNumber, Min } from 'class-validator';
 
-export class Device {
-  id: string;
-  readings: Array<Reading>;
-}
-
 export class Reading {
   @ApiProperty({
     type: String,
