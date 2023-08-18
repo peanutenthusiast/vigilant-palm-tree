@@ -140,28 +140,28 @@ describe('AppController (e2e)', () => {
           .expect(400);
       });
     });
-  });
 
-  describe('2xx', () => {
-    it('successfully stores device readings', () => {
-      const deviceReading = {
-        id: '36d5658a-6908-479e-887e-a949ec199272',
-        readings: [
-          {
-            timestamp: '2021-09-29T16:08:15+01:00',
-            count: 2,
-          },
-          {
-            timestamp: '2021-09-29T16:09:15+01:00',
-            count: 15,
-          },
-        ],
-      };
+    describe('2xx', () => {
+      it('successfully stores device readings', () => {
+        const deviceReading = {
+          id: '36d5658a-6908-479e-887e-a949ec199272',
+          readings: [
+            {
+              timestamp: '2021-09-29T16:08:15+01:00',
+              count: 2,
+            },
+            {
+              timestamp: '2021-09-29T16:09:15+01:00',
+              count: 15,
+            },
+          ],
+        };
 
-      return request(app.getHttpServer())
-        .post('/device-readings')
-        .send(deviceReading)
-        .expect(201);
+        return request(app.getHttpServer())
+          .post('/device-readings')
+          .send(deviceReading)
+          .expect(201);
+      });
     });
   });
 });

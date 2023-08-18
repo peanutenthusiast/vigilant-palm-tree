@@ -12,7 +12,7 @@ export class StoreReadingsDto {
   id: string;
 
   @ApiProperty({
-    type: Array,
+    type: [Reading],
     description: 'The list of readings for the device',
   })
   @ArrayNotEmpty()

@@ -10,11 +10,11 @@ import {
 import { DeviceReadingsService } from './device-readings.service';
 import { StoreReadingsDto } from './dto/store-readings.dto';
 import {
+  ApiBadRequestResponse,
   ApiCreatedResponse,
   ApiNotFoundResponse,
   ApiOkResponse,
   ApiTags,
-  ApiUnprocessableEntityResponse,
 } from '@nestjs/swagger';
 import { FetchReadingsDto } from './dto/fetch-readings.dto';
 
@@ -25,7 +25,7 @@ export class DeviceReadingsController {
 
   @Post()
   @ApiCreatedResponse({ description: 'Readings stored successfully' })
-  @ApiUnprocessableEntityResponse({
+  @ApiBadRequestResponse({
     description: 'Bad request due to missing data',
   })
   store(@Body() storeReadingsDto: StoreReadingsDto) {
@@ -35,6 +35,9 @@ export class DeviceReadingsController {
   @ApiOkResponse({ description: 'Readings retrieved successfully' })
   @ApiNotFoundResponse({
     description: 'Readings for device ID could not be found',
+  })
+  @ApiBadRequestResponse({
+    description: 'The given id is not a UUID'
   })
   @Get(':id')
   findOne(@Param() { id }: FetchReadingsDto) {
