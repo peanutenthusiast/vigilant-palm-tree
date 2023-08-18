@@ -128,4 +128,24 @@ describe('DeviceReadingsService', () => {
       ).count,
     ).toEqual(2);
   });
+
+  it('should throw an error when no device id is found', () => {
+    service.store({
+      id: '36d5658a-6908-479e-887e-a949ec199272',
+      readings: [
+        {
+          timestamp: '2021-09-29T16:08:15+01:00',
+          count: 2,
+        },
+        {
+          timestamp: '2021-09-29T16:09:15+01:00',
+          count: 15,
+        },
+      ],
+    })
+
+    const nonexistentDeviceId = chance.guid()
+
+    expect(() => service.findOne(nonexistentDeviceId)).toThrow()
+  })
 });

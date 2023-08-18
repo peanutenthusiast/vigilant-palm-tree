@@ -28,8 +28,9 @@ export class DeviceReadingsService {
   findOne(id: string): { readings: Reading[] } {
     const retrieved = this.deviceReadings.get(id);
 
-    if (!retrieved)
-      throw new Error('could not find readings with given device id ' + id);
+    if (!retrieved) {
+      throw Error('could not find readings with given device id ' + id);
+    }
 
     const readings = [];
 
