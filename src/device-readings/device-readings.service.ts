@@ -4,18 +4,38 @@ import { Reading } from './entities/device.entity';
 
 @Injectable()
 export class DeviceReadingsService {
-  private deviceReadings: Map<string, Reading[]> = new Map()
+  private deviceReadings: Map<string, Map<string, number>> = new Map();
 
   store(storeReadingsDto: StoreReadingsDto) {
-    const retrieved = this.deviceReadings.get(storeReadingsDto.id)
+    const retrieved = this.deviceReadings.get(storeReadingsDto.id);
 
     if (!retrieved) {
-      this.deviceReadings.set(storeReadingsDto.id, storeReadingsDto.readings)
+      const storing = new Map();
+
+      storeReadingsDto.readings.forEach(({ timestamp, count }) => {
+        storing.set(timestamp, count);
+      });
+      this.deviceReadings.set(storeReadingsDto.id, storing);
+    } else {
+      storeReadingsDto.readings.forEach(({ timestamp, count }) => {
+        if (!retrieved.has(timestamp)) retrieved.set(timestamp, count);
+      });
+
+      this.deviceReadings.set(storeReadingsDto.id, retrieved);
     }
   }
 
-
   findOne(id: string): { readings: Reading[] } {
-    return { readings: this.deviceReadings.get(id) }
+    const retrieved = this.deviceReadings.get(id);
+
+    if (!retrieved)
+      throw new Error('could not find readings with given device id ' + id);
+
+    const readings = [];
+
+    for (const [timestamp, count] of retrieved) {
+      readings.push({ timestamp, count });
+    }
+    return { readings };
   }
 }

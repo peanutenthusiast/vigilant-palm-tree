@@ -4,17 +4,18 @@ import { DeviceReadingsService } from './device-readings.service';
 
 describe('DevicesController', () => {
   let controller: DeviceReadingsController;
-  let service: DeviceReadingsService
+  let service: DeviceReadingsService;
 
   beforeEach(async () => {
-    
     const module: TestingModule = await Test.createTestingModule({
       controllers: [DeviceReadingsController],
-      providers: [{ provide: DeviceReadingsService, useValue: { store: jest.fn() }}],
+      providers: [
+        { provide: DeviceReadingsService, useValue: { store: jest.fn() } },
+      ],
     }).compile();
 
     controller = module.get<DeviceReadingsController>(DeviceReadingsController);
-    service = module.get<DeviceReadingsService>(DeviceReadingsService)
+    service = module.get<DeviceReadingsService>(DeviceReadingsService);
   });
 
   it('should be defined', () => {
@@ -22,7 +23,6 @@ describe('DevicesController', () => {
   });
 
   it('should invoke DevicesService.storeDeviceReadings', () => {
-  
     const deviceReading = {
       id: '36d5658a-6908-479e-887e-a949ec199272',
       readings: [
@@ -36,10 +36,10 @@ describe('DevicesController', () => {
         },
       ],
     };
-    controller.store(deviceReading)
+    controller.store(deviceReading);
 
     const storeSpy = jest.spyOn(service, 'store');
 
-    expect(storeSpy).toBeCalledTimes(1)
-  })
+    expect(storeSpy).toBeCalledTimes(1);
+  });
 });
