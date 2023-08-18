@@ -1,3 +1,3 @@
 export class FetchReadingsDto {
-    deviceId: string
+  deviceId: string;
 }

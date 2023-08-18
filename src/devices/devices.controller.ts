@@ -8,15 +8,14 @@ import {
   Delete,
 } from '@nestjs/common';
 import { DevicesService } from './devices.service';
-import { CreateDeviceDto } from './dto/create-device.dto';
-import { UpdateDeviceDto } from './dto/update-device.dto';
+import { StoreReadingsDto } from './dto/store-readings.dto';
 
 @Controller('device-readings')
 export class DevicesController {
   constructor(private readonly devicesService: DevicesService) {}
 
   @Post()
-  create(@Body() createDeviceDto: CreateDeviceDto) {
+  create(@Body() createDeviceDto: StoreReadingsDto) {
     return this.devicesService.create(createDeviceDto);
   }
 
