@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsDateString, IsNumber } from 'class-validator';
+import { IsISO8601, IsNumber, Min } from 'class-validator';
 
 export class Device {
   id: string;
@@ -7,18 +7,18 @@ export class Device {
 }
 
 export class Reading {
-
   @ApiProperty({
     type: String,
-    description: 'an ISO-8061 timestamp for when the reading was taken'
+    description: 'an ISO-8061 timestamp for when the reading was taken',
   })
-  @IsDateString()
+  @IsISO8601()
   timestamp: string;
 
   @ApiProperty({
     type: Number,
-    description: 'An integer representing the reading data'
+    description: 'An integer representing the reading data',
   })
   @IsNumber()
+  @Min(0)
   count: number;
 }

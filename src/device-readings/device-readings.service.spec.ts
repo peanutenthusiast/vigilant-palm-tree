@@ -142,10 +142,10 @@ describe('DeviceReadingsService', () => {
           count: 15,
         },
       ],
-    })
+    });
 
-    const nonexistentDeviceId = chance.guid()
+    const nonexistentDeviceId = chance.guid();
 
-    expect(() => service.findOne(nonexistentDeviceId)).toThrow()
-  })
+    expect(() => service.findOne(nonexistentDeviceId)).toThrow();
+  });
 });

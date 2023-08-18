@@ -1,18 +1,27 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { DeviceReadingsController } from 'src/devices/devices.controller';
 import { DeviceReadingsService } from './device-readings.service';
+import { DeviceReadingsController } from './device-readings.controller';
+import { Chance } from 'chance';
 
 describe('DevicesController', () => {
   let controller: DeviceReadingsController;
   let service: DeviceReadingsService;
+  let findOneMock: jest.Mock;
+  let chance: Chance;
 
   beforeEach(async () => {
+    findOneMock = jest.fn();
     const module: TestingModule = await Test.createTestingModule({
       controllers: [DeviceReadingsController],
       providers: [
-        { provide: DeviceReadingsService, useValue: { store: jest.fn() } },
+        {
+          provide: DeviceReadingsService,
+          useValue: { store: jest.fn(), findOne: findOneMock },
+        },
       ],
     }).compile();
+
+    chance = new Chance();
 
     controller = module.get<DeviceReadingsController>(DeviceReadingsController);
     service = module.get<DeviceReadingsService>(DeviceReadingsService);
@@ -41,5 +50,13 @@ describe('DevicesController', () => {
     const storeSpy = jest.spyOn(service, 'store');
 
     expect(storeSpy).toBeCalledTimes(1);
+  });
+
+  it('should throw an error when nonexistent device id is passed to findOne', () => {
+    findOneMock.mockImplementation((id) => {
+      throw new Error('cannot find device for id ' + id);
+    });
+
+    expect(() => controller.findOne(chance.guid)).toThrow();
   });
 });
