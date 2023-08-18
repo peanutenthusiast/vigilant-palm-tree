@@ -3,24 +3,23 @@ import {
   Get,
   Post,
   Body,
-  Patch,
   Param,
-  Delete,
 } from '@nestjs/common';
-import { DevicesService } from './devices.service';
+import { DeviceReadingService } from './device-readings.service'
 import { StoreReadingsDto } from './dto/store-readings.dto';
 
 @Controller('device-readings')
-export class DevicesController {
-  constructor(private readonly devicesService: DevicesService) {}
+export class DeviceReadingsController {
+  constructor(private readonly deviceReadingService: DeviceReadingService) {}
 
   @Post()
   create(@Body() createDeviceDto: StoreReadingsDto) {
-    return this.devicesService.create(createDeviceDto);
+    console.log('this should not be hit yet ', createDeviceDto);
+    return this.deviceReadingService.create(createDeviceDto);
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.devicesService.findOne(+id);
+    return this.deviceReadingService.findOne(+id);
   }
 }
