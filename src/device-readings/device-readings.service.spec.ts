@@ -1,5 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { DeviceReadingsService } from './device-readings.service';
+import { Reading } from './entities/device.entity';
+import { StoreReadingsDto } from './dto/store-readings.dto';
 
 describe('DeviceReadingsService', () => {
   let service: DeviceReadingsService;
@@ -39,6 +41,42 @@ describe('DeviceReadingsService', () => {
   })
 
   it('should not update the count for preexisting timestamps per a device id', () => {
+    const deviceReading = {
+      id: '36d5658a-6908-479e-887e-a949ec199272',
+      readings: [
+        {
+          timestamp: '2021-09-29T16:08:15+01:00',
+          count: 2,
+        },
+        {
+          timestamp: '2021-09-29T16:09:15+01:00',
+          count: 15,
+        },
+      ],
+    }; 
+
+    service.store(deviceReading)
+    let readings: Reading[]
+
+    ({ readings } = service.findOne(deviceReading.id))
     
+    expect(readings.find(({timestamp}) => timestamp === '2021-09-29T16:08:15+01:00').count).toEqual(2)
+   
+    const failedUpdateReading: StoreReadingsDto = {
+      id: '36d5658a-6908-479e-887e-a949ec199272',
+      readings: [
+        {
+          timestamp: '2021-09-29T16:08:15+01:00',
+          count: 3,
+        },
+      ],
+    }
+
+    service.store(failedUpdateReading);
+
+    ({ readings } = service.findOne(deviceReading.id))
+
+    expect(readings.find(({timestamp}) => timestamp === '2021-09-29T16:08:15+01:00').count).toEqual(2)
+
   })
 });
