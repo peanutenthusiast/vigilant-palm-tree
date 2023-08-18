@@ -16,6 +16,7 @@ import {
   ApiTags,
   ApiUnprocessableEntityResponse,
 } from '@nestjs/swagger';
+import { FetchReadingsDto } from './dto/fetch-readings.dto';
 
 @ApiTags('device-readings')
 @Controller('device-readings')
@@ -36,7 +37,7 @@ export class DeviceReadingsController {
     description: 'Readings for device ID could not be found',
   })
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param() { id }: FetchReadingsDto) {
     try {
       return this.deviceReadingsService.findOne(id);
     } catch (error) {

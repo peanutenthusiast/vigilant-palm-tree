@@ -43,12 +43,21 @@ describe('AppController (e2e)', () => {
         .post('/device-readings')
         .send(deviceReading);
     });
+
     describe('4xx', () => {
       it('should return 404 when nonexistent device id is passed', () => {
         const nonexistentId = chance.guid();
         return request(app.getHttpServer())
           .get('/device-readings/' + nonexistentId)
           .expect(404);
+      });
+
+      it('should return a 400 when non uuid param is passed', () => {
+        const badId = '12,4Abc';
+
+        return request(app.getHttpServer())
+          .get('/device-readings/' + badId)
+          .expect(400);
       });
     });
   });

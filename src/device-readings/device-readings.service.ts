@@ -37,6 +37,7 @@ export class DeviceReadingsService {
     for (const [timestamp, count] of retrieved) {
       readings.push({ timestamp, count });
     }
+    readings.sort();
     return { readings };
   }
 }
