@@ -26,6 +26,27 @@ export class DeviceReadingsService {
   }
 
   findOne(id: string): { readings: Reading[] } {
+    const readings = this._findOne(id);
+
+    readings.sort();
+    return { readings };
+  }
+
+  getCumulativeCount(id: string): { cumulativeCount: number } {
+    let readings: Reading[];
+
+    try {
+      readings = this._findOne(id);
+    } catch (error) {
+      throw error;
+    }
+
+    return {
+      cumulativeCount: readings.reduce((prev, { count }) => prev + count, 0),
+    };
+  }
+
+  _findOne(id: string): Reading[] {
     const retrieved = this.deviceReadings.get(id);
 
     if (!retrieved) {
@@ -37,7 +58,6 @@ export class DeviceReadingsService {
     for (const [timestamp, count] of retrieved) {
       readings.push({ timestamp, count });
     }
-    readings.sort();
-    return { readings };
+    return readings;
   }
 }

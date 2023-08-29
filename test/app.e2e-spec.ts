@@ -62,6 +62,49 @@ describe('AppController (e2e)', () => {
     });
   });
 
+  describe('GET /device-readings/count/:id', () => {
+    let deviceReadingId: string;
+    beforeAll(() => {
+      const deviceReading = {
+        id: '36d5658a-6908-479e-887e-a949ec199272',
+        readings: [
+          {
+            timestamp: '2021-09-29T16:08:15+01:00',
+            count: 2,
+          },
+          {
+            timestamp: '2021-09-29T16:09:15+01:00',
+            count: 15,
+          },
+        ],
+      };
+
+      ({ id: deviceReadingId } = deviceReading);
+
+      return request(app.getHttpServer())
+        .post('/device-readings')
+        .send(deviceReading);
+    });
+    describe('2xx', () => {
+      it('should return the appropriate cumulative count for a device', () => {
+        return request(app.getHttpServer())
+          .get('/device-readings/count/' + deviceReadingId)
+          .expect(200)
+          .expect({ cumulativeCount: 17 });
+      });
+    });
+
+    describe('4xx', () => {
+      it('should return 404 when device id does not exist', () => {
+        deviceReadingId = chance.guid();
+
+        return request(app.getHttpServer())
+          .get('/device-readings/count/' + deviceReadingId)
+          .expect(404);
+      });
+    });
+  });
+
   describe('/device-readings (POST)', () => {
     describe('4xx', () => {
       describe('should return 400 when data is malformed', () => {

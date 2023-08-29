@@ -37,12 +37,21 @@ export class DeviceReadingsController {
     description: 'Readings for device ID could not be found',
   })
   @ApiBadRequestResponse({
-    description: 'The given id is not a UUID'
+    description: 'The given id is not a UUID',
   })
   @Get(':id')
   findOne(@Param() { id }: FetchReadingsDto) {
     try {
       return this.deviceReadingsService.findOne(id);
+    } catch (error) {
+      throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
+    }
+  }
+
+  @Get('count/:id')
+  getCumulativeCount(@Param() params: { id: string }) {
+    try {
+      return this.deviceReadingsService.getCumulativeCount(params.id);
     } catch (error) {
       throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
     }
