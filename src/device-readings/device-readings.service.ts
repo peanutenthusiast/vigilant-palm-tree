@@ -28,7 +28,11 @@ export class DeviceReadingsService {
   findOne(id: string): { readings: Reading[] } {
     const readings = this._findOne(id);
 
-    readings.sort();
+    readings.sort(
+      (reading, nextReading) =>
+        new Date(reading.timestamp).getTime() -
+        new Date(nextReading.timestamp).getTime(),
+    );
     return { readings };
   }
 
@@ -44,6 +48,11 @@ export class DeviceReadingsService {
     return {
       cumulativeCount: readings.reduce((prev, { count }) => prev + count, 0),
     };
+  }
+
+  getLatestTimestamp(id: string): { latestTimestamp: string } {
+    const { readings } = this.findOne(id);
+    return { latestTimestamp: readings[readings.length - 1].timestamp };
   }
 
   _findOne(id: string): Reading[] {

@@ -85,6 +85,7 @@ describe('AppController (e2e)', () => {
         .post('/device-readings')
         .send(deviceReading);
     });
+
     describe('2xx', () => {
       it('should return the appropriate cumulative count for a device', () => {
         return request(app.getHttpServer())
@@ -100,6 +101,50 @@ describe('AppController (e2e)', () => {
 
         return request(app.getHttpServer())
           .get('/device-readings/count/' + deviceReadingId)
+          .expect(404);
+      });
+    });
+  });
+
+  describe('/device-readings/latest/:id', () => {
+    let deviceReadingId;
+    beforeEach(() => {
+      const deviceReading = {
+        id: '36d5658a-6908-479e-887e-a949ec199272',
+        readings: [
+          {
+            timestamp: '2021-09-29T16:08:15+01:00',
+            count: 2,
+          },
+          {
+            timestamp: '2021-09-29T16:09:15+01:00',
+            count: 15,
+          },
+        ],
+      };
+
+      ({ id: deviceReadingId } = deviceReading);
+
+      return request(app.getHttpServer())
+        .post('/device-readings')
+        .send(deviceReading);
+    });
+
+    describe('2xx', () => {
+      it('returns the latest timestamp for a device id', () => {
+        return request(app.getHttpServer())
+          .get('/device-readings/latest/' + deviceReadingId)
+          .expect(200)
+          .expect({ latestTimestamp: '2021-09-29T16:09:15+01:00' });
+      });
+    });
+
+    describe('4xx', () => {
+      it('returns a 404 when a nonexistent timestamp is passed', () => {
+        deviceReadingId = chance.guid();
+
+        return request(app.getHttpServer())
+          .get('/device-readings/latest/' + deviceReadingId)
           .expect(404);
       });
     });

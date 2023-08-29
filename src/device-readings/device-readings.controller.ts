@@ -56,4 +56,13 @@ export class DeviceReadingsController {
       throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
     }
   }
+
+  @Get('latest/:id')
+  getLatestTimestamp(@Param() params: { id: string }) {
+    try {
+      return this.deviceReadingsService.getLatestTimestamp(params.id);
+    } catch (error) {
+      throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
+    }
+  }
 }
