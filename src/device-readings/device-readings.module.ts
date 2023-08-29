@@ -6,4 +6,4 @@ import { DeviceReadingsController } from './device-readings.controller';
   controllers: [DeviceReadingsController],
   providers: [DeviceReadingsService],
 })
-export class DevicereadingsModule {}
+export class DeviceReadingsModule {}
